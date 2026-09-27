@@ -13,7 +13,10 @@ contract PairFactory is IPairFactory {
         return allPairs.length;
     }
 
-    function createPair(address tokenA, address tokenB) external virtual returns(address pair){
+    bytes32 public constant INIT_CODE_PAIR_HASH = 
+     keccak256(abi.encodePacked(type(TokenPair).creationCode));
+
+    function createPair(address tokenA, address tokenB) external returns(address pair){
 
         require(tokenA != tokenB, "IDENTICAL_ADDRESSES");
 
@@ -38,6 +41,7 @@ contract PairFactory is IPairFactory {
         getPair[_tokenB][_tokenA]=pair;
         allPairs.push(pair);
 
-        emit PairCreated(_tokenA,_tokenB,pair,allPairs.Length());
+        emit PairCreated(_tokenA,_tokenB,pair,allPairs.length);
     }
+
 }    

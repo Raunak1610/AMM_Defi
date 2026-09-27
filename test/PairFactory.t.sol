@@ -1,20 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.33;
 
-import {test} from "forge-std/Test.sol";
-import {PairFactory} from "../src/contracts/PairFactory.sol";
-import {TokenPair} from "../src/contracts/TokenPair.sol";
+import {Test} from "forge-std/Test.sol";
+import {PairFactory} from "src/contracts/PairFactory.sol";
+import {TokenPair} from "src/contracts/TokenPair.sol";
 
-contract PairFactoryTest is Test{
-    PairFactory internal pairfactory;
+contract PairFactoryTest is Test {
+    PairFactory internal pairFactory;
     address internal tokenA;
     address internal tokenB;
 
     event PairCreated(address indexed tokenA, address indexed tokenB, address pair, uint256);
-    function setUp() public{
-        pairFactory=new PairFactory();
-        tokenA=makeAddr("tokenA");
-        tokenB=makeAddr("tokenB");
+    
+    function setUp() public {
+        tokenA = makeAddr("tokenA");
+        tokenB = makeAddr("tokenB");
+        pairFactory = new PairFactory();
     }
 
     function _sortTokens(address a, address b) internal pure returns (address token0, address token1) {
@@ -37,15 +38,6 @@ contract PairFactoryTest is Test{
         predicted = address(uint160(uint256(digest)));
     }
 
-// token0 + token1
-//        ↓
-//      salt
-//        ↓
-// factory + salt + TokenPair creation code
-//        ↓
-//     CREATE2 formula
-//        ↓
-// predicted pair address
 
     function testCreatePair() public {
         (address token0,address token1) = _sortTokens(tokenA, tokenB);
@@ -102,6 +94,5 @@ contract PairFactoryTest is Test{
         vm.expectRevert(bytes("ZERO_ADDRESS"));
         pairFactory.createPair((tokenA), address(0));
     }
-
 
 }

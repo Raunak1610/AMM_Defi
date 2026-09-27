@@ -12,5 +12,7 @@ interface IPairFactory {
 
     function createPair(address tokenA, address tokenB) external returns (address pair);
 
-    //function INIT_CODE_PAIR_HASH() external view returns (bytes32);
-}
+    /// @notice Returns the init code hash for creating pair contracts
+    /// @return The init code hash
+    function INIT_CODE_PAIR_HASH() external view returns (bytes32);
+} 
